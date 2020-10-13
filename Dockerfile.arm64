@@ -45,6 +45,8 @@ RUN cd PYNQ/sdbuild/packages/libsds/libcma && make install
 #COPY libxlnk_cma.h /usr/include/
 COPY xf86drm* /usr/include/
 #COPY boost /usr/include/boost
+RUN wget -O /usr/include/xf86drm.h https://raw.githubusercontent.com/grate-driver/libdrm/master/xf86drm.h
+RUN wget -O /usr/include/xf86drmMode.h https://raw.githubusercontent.com/grate-driver/libdrm/master/xf86drmMode.h
 
 RUN wget https://files.pythonhosted.org/packages/9f/4e/fca584f6d0cdbb6f6ee67a7def3342af190ff0efd2226262302d2bedc0b2/pynq-2.5.4.tar.gz
 RUN tar xf pynq-2.5.4.tar.gz
