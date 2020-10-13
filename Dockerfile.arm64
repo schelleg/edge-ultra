@@ -8,15 +8,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tz
 RUN apt-get install -yq --no-install-recommends \
      build-essential libssl-dev libffi-dev python3-dev \
      python3-pandas python3-cffi python3-pip python3-setuptools \
+     python3-wheel python3-matplotlib python3-pandas \
      gcc g++ git make wget
 
-RUN apt-get install -yq python3-wheel
-
 # Jupyter install and config 
-#RUN pip3 install --upgrade --force-reinstall --no-cache-dir jupyter
 RUN pip3 install cython
 RUN pip3 install jupyter
-# RUN which jupyter
 RUN jupyter notebook --generate-config
 RUN mkdir -p /root/notebooks
 
@@ -39,11 +36,9 @@ ENTRYPOINT ["/usr/local/bin/tini", "--"]
 RUN apt-get install -y libdrm-amdgpu1 libdrm-dev libdrm2
 RUN apt-get install -y libjpeg-dev zlib1g-dev
 
-
 COPY libxlnk_cma.h /usr/include/
 COPY xf86drm* /usr/include/
 COPY boost /usr/include/boost
-
 
 RUN wget https://files.pythonhosted.org/packages/9f/4e/fca584f6d0cdbb6f6ee67a7def3342af190ff0efd2226262302d2bedc0b2/pynq-2.5.4.tar.gz
 RUN tar xf pynq-2.5.4.tar.gz
@@ -51,15 +46,16 @@ RUN sed -i 's/-I=/-I/g' pynq-2.5.4/pynq/lib/_pynq/_displayport/Makefile
 RUN rm -rf pynq-2.5.4.tar.gz
 RUN tar czf pynq-2.5.4.tar.gz pynq-2.5.4
 RUN pip3 install pynq-2.5.4.tar.gz --no-deps
-#RUN rm -rf pynq-2.5.4
+RUN rm -rf pynq-2.5.4
 
 # install PYNQ Libraries
 RUN git clone https://github.com/Xilinx/PYNQ
 RUN cd PYNQ && git checkout --track origin/image_v2.6.0
 RUN cd PYNQ/sdbuild/packages/libsds/libcma && make install
-#RUN rm -rf PYNQ
+RUN rm -rf PYNQ
 
-
+# need lib/firmware for bitstream download
+RUN mkdir /lib/firmware
 
 # last file copies
 COPY *.sh /
