@@ -1,0 +1,26 @@
+FROM grahams/pynq-server1804_arm64:1.0.0
+
+
+USER root
+
+
+RUN apt-get install -y python3-pil
+# RUN BOARD=Ulra96 wget -O bnn-pynq.tgz https://github.com/Xilinx/BNN-PYNQ/archive/master.tar.gz
+
+# RUN BOARD=$BOARD pip3 install git+https://github.com/Xilinx/BNN-PYNQ.git
+
+RUN BOARD=Ulra96 wget -O bnn-pynq.tgz https://github.com/Xilinx/BNN-PYNQ/archive/master.tar.gz 
+
+RUN tar xf bnn-pynq.tgz
+RUN sed -i "s/import bnn/\#import bnn/" BNN-PYNQ-master/setup.py  
+RUN sed -i "s/bnn.__version__/0.1/" BNN-PYNQ-master/setup.py  
+RUN BOARD=Ultra96 PYNQ_JUPYTER_NOTEBOOKS=/root pip3 install /BNN-PYNQ-master/.
+
+# start.sh will kick off Jupyter server on 8888 among other things...
+EXPOSE 8888
+ENTRYPOINT ["/usr/local/bin/tini", "--"]
+
+CMD ["/start.sh"]
+
+# CMD ["pip3", "install", "/bnn-pynq.tgz"]
+

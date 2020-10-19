@@ -43,7 +43,7 @@ RUN cd PYNQ/sdbuild/packages/libsds/libcma && make install
 # RUN rm -rf PYNQ
 
 #COPY libxlnk_cma.h /usr/include/
-COPY xf86drm* /usr/include/
+#COPY xf86drm* /usr/include/
 #COPY boost /usr/include/boost
 RUN wget -O /usr/include/xf86drm.h https://raw.githubusercontent.com/grate-driver/libdrm/master/xf86drm.h
 RUN wget -O /usr/include/xf86drmMode.h https://raw.githubusercontent.com/grate-driver/libdrm/master/xf86drmMode.h
@@ -53,7 +53,7 @@ RUN tar xf pynq-2.5.4.tar.gz
 RUN sed -i 's/-I=/-I/g' pynq-2.5.4/pynq/lib/_pynq/_displayport/Makefile
 RUN rm -rf pynq-2.5.4.tar.gz
 RUN tar czf pynq-2.5.4.tar.gz pynq-2.5.4
-RUN pip3 install pynq-2.5.4.tar.gz --no-deps
+RUN BOARD=Ultra96 pip3 install pynq-2.5.4.tar.gz --no-deps
 RUN rm -rf pynq-2.5.4
 
 # need lib/firmware for bitstream download
