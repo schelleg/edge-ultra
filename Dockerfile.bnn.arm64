@@ -1,8 +1,6 @@
 FROM grahams/pynq-server1804_arm64:1.0.0
 
-
 USER root
-
 
 RUN apt-get install -y python3-pil
 
